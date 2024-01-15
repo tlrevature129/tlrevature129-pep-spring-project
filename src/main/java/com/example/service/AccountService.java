@@ -29,15 +29,28 @@ public class AccountService {
         if(username.length() == 0  || passwordLength < 4) throw new InvalidRegistrationException();
 
         //check if user already exist
-        Account existingAccount = accountRepository.getAccountByUsername(username);
-        if(existingAccount != null) throw new DuplicateUsernameException();
+        Optional<Account> existingAccount = accountRepository.getAccountByUsername(username);
+        if(existingAccount.isPresent()){
+            throw new DuplicateUsernameException();
+        }
 
         return accountRepository.save(account);
     }
 
     //LOGIN
-    //public Optional<Account> getAccountByUsername(String username){
-        //return accountRepository.getAccountByUserName(username);
-    //}
+    @ResponseStatus(HttpStatus.OK)
+    public Account login(Account account){
+        String username = account.getUsername();
+        String password = account.getPassword();
+        Optional<Account> optionalAccount = accountRepository.findByUsernameAndPassword(username, password);
+        if(optionalAccount.isPresent()){
+            System.out.println(optionalAccount.isPresent() + "-********************************");
+            return optionalAccount.get();
+        }
+        else 
+            throw new UnauthorizedException();
+    }
+
+
     //POST localhost:8080/login
 }

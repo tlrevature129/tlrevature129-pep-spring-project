@@ -41,8 +41,12 @@ public class SocialMediaController {
     //LOGIN
     @PostMapping("/login")
     @ResponseStatus(HttpStatus.OK)
-    public void login(@RequestBody Account account){
-
+    public Account login(@RequestBody Account account){
+        try{
+            return accountService.login(account);
+        } catch (UnauthorizedException e){
+            throw e;
+        }
     }
 
     //MESSAGES
