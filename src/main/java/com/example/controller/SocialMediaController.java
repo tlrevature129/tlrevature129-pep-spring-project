@@ -49,14 +49,34 @@ public class SocialMediaController {
         }
     }
 
+
     //MESSAGES
+    //Create New Message
+    //POST localhost:8080/messages
+    @PostMapping("/messages")
+    @ResponseStatus(HttpStatus.OK)
+    public Message createNewMessage(@RequestBody Message message){
+        try{
+            return messageService.createNewMessage(message);
+        } catch (MessageErrorException e){
+            throw e;
+        }
+    }
+
+    //Get All Messages
     //GET localhost:8080/messages
     @GetMapping("/messages")
     @ResponseStatus(HttpStatus.OK)
     public List<Message> getAllMessages(){
         return messageService.getAllMessages();
-    }
+    }    
+
+    //TODO: getByMessageId
+    //Get One Message Given Message Id
     //GET localhost:8080/messages/{message_id}
+
+
+
     //DELETE localhost:8080/messages/{message_id}
     //PATCH localhost:8080/messages/{message_id}
     //GET localhost:8080/accounts/{account_id}/messages

@@ -44,7 +44,6 @@ public class AccountService {
         String password = account.getPassword();
         Optional<Account> optionalAccount = accountRepository.findByUsernameAndPassword(username, password);
         if(optionalAccount.isPresent()){
-            System.out.println(optionalAccount.isPresent() + "-********************************");
             return optionalAccount.get();
         }
         else 
