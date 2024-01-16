@@ -49,7 +49,6 @@ public class SocialMediaController {
         }
     }
 
-
     //MESSAGES
     //Create New Message
     //POST localhost:8080/messages
@@ -71,14 +70,36 @@ public class SocialMediaController {
         return messageService.getAllMessages();
     }    
 
-    //TODO: getByMessageId
     //Get One Message Given Message Id
     //GET localhost:8080/messages/{message_id}
+    @GetMapping("/messages/{message_id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Message getMessageById(@PathVariable int message_id){
+        return messageService.getMessageById(message_id);
+    }
 
-
-
+    //Delete a Message Given Message Id
     //DELETE localhost:8080/messages/{message_id}
+    @DeleteMapping("/messages/{message_id}")
+    @ResponseStatus(HttpStatus.OK)
+    public String deleteMessageById(@PathVariable int message_id){
+        return messageService.deleteMessageById(message_id);
+    }
+
+    //Update Message Given Message Id
     //PATCH localhost:8080/messages/{message_id}
+    @PatchMapping("/messages/{message_id}")
+    public String updateMessage(@PathVariable int message_id, @RequestBody String newMessage){
+        try{
+            if(newMessage == null || newMessage.isBlank() || newMessage.length() > 255)
+                throw new MessageErrorException();
+            return messageService.updateMessage(message_id, newMessage);
+        } catch (MessageErrorException e){
+            throw e;
+        }
+    }
+
+
     //GET localhost:8080/accounts/{account_id}/messages
 
 }

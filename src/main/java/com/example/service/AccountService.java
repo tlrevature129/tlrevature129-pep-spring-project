@@ -5,7 +5,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.example.entity.Account;
@@ -26,30 +25,28 @@ public class AccountService {
         int passwordLength = account.getPassword().length();
 
         //check valid registration 
-        if(username.length() == 0  || passwordLength < 4) throw new InvalidRegistrationException();
+        if(username.length() == 0  || passwordLength < 4) 
+        throw new InvalidRegistrationException();
 
         //check if user already exist
         Optional<Account> existingAccount = accountRepository.getAccountByUsername(username);
-        if(existingAccount.isPresent()){
+        if(existingAccount.isPresent())
             throw new DuplicateUsernameException();
-        }
 
         return accountRepository.save(account);
     }
 
     //LOGIN
+    //POST localhost:8080/login
     @ResponseStatus(HttpStatus.OK)
     public Account login(Account account){
         String username = account.getUsername();
         String password = account.getPassword();
+
         Optional<Account> optionalAccount = accountRepository.findByUsernameAndPassword(username, password);
-        if(optionalAccount.isPresent()){
+        if(optionalAccount.isPresent())
             return optionalAccount.get();
-        }
-        else 
+        else
             throw new UnauthorizedException();
     }
-
-
-    //POST localhost:8080/login
 }

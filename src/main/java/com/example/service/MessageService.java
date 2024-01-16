@@ -3,6 +3,7 @@ package com.example.service;
 import java.util.List;
 import java.util.Optional;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +27,7 @@ public class MessageService {
 
         Optional<Account> optAccount = accountRepository.findById(message.getPosted_by());
 
+        //check if new message meets requirement
         int messageLength = message.getMessage_text().length();
         if(!optAccount.isPresent() || messageLength == 0 || messageLength > 255) throw new MessageErrorException();
 
@@ -51,10 +53,32 @@ public class MessageService {
 
     //DELETE A MESSAGE GIVEN MESSAGE ID
     //DELETE localhost:8080/messages/{message_id}
- 
+    public String deleteMessageById(int message_id){
+        Optional<Message> optMessage = messageRepository.findById(message_id);
+        if(optMessage.isPresent()){
+            messageRepository.deleteById(message_id);
+            return "1";
+        } else {
+            return "";
+        }
+    }
 
-    //UPDATE MESSAGE GIVE MESSAGE ID
+    //UPDATE MESSAGE GIVEN MESSAGE ID & NEW MESSAGE
     //PATCH localhost:8080/messages/{message_id}
+    public String updateMessage(int message_id, String newMessage){
+        Optional<Message> optMessage = messageRepository.findById(message_id);
+
+        boolean isValidMessage = newMessage != null && !newMessage.isBlank() && newMessage.length() <= 255;
+        
+        if(optMessage.isPresent() && isValidMessage){
+            Message message = optMessage.get();
+            message.setMessage_text(newMessage);
+            messageRepository.save(message);
+            return "1";
+        } else {
+            throw new MessageErrorException();
+        }
+    }
 
 
     //GET ALL MESSAGES FROM USER GIVEN ACCOUNT_ID
