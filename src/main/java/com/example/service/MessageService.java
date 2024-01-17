@@ -68,7 +68,7 @@ public class MessageService {
     public String updateMessage(int message_id, String newMessage){
         Optional<Message> optMessage = messageRepository.findById(message_id);
 
-        boolean isValidMessage = newMessage != null && !newMessage.isBlank() && newMessage.length() <= 255;
+        boolean isValidMessage = newMessage != null && !newMessage.isEmpty() && newMessage.length() <= 255;
         
         if(optMessage.isPresent() && isValidMessage){
             Message message = optMessage.get();
@@ -83,5 +83,8 @@ public class MessageService {
 
     //GET ALL MESSAGES FROM USER GIVEN ACCOUNT_ID
     //GET localhost:8080/accounts/{account_id}/messages
+    public List<Message> getAllMessagesById(int postedBy){
+        return  messageRepository.findAllMessageByPostedBy(postedBy);
+    }
 
 }
