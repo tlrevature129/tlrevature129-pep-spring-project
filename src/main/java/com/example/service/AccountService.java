@@ -32,7 +32,6 @@ public class AccountService {
         Optional<Account> existingAccount = accountRepository.getAccountByUsername(username);
         if(existingAccount.isPresent())
             throw new DuplicateUsernameException();
-
         return accountRepository.save(account);
     }
 
@@ -42,11 +41,13 @@ public class AccountService {
     public Account login(Account account){
         String username = account.getUsername();
         String password = account.getPassword();
-
+/*
         Optional<Account> optionalAccount = accountRepository.findByUsernameAndPassword(username, password);
         if(optionalAccount.isPresent())
             return optionalAccount.get();
         else
             throw new UnauthorizedException();
+*/
+        return (Account) accountRepository.findByUsernameAndPassword(username, password).orElseThrow(() ->  new UnauthorizedException());
     }
 }
